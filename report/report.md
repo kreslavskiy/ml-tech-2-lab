@@ -87,42 +87,15 @@ The flow (`app/qa_api.py`): embed the question with the same local model → ret
 
 ### 2.3 Example Q&A
 
-**Grounded question** — `POST /qa/query`:
+Both calls below were made from the [Bruno](https://www.usebruno.com/) API client against the running service (`POST http://localhost:8000/qa/query`).
 
-```json
-{
-  "question": "What model architecture was trained in Lab 1 and on what dataset, and what top-1 accuracy did it reach?",
-  "k": 5
-}
-```
+**Grounded question.** Asking about the Lab 1 model returns a correct, well-structured answer — ResNet-18 implemented from scratch in PyTorch for CIFAR-style images, dataset CIFAR-100, top-1 accuracy 76.33% at epoch 58 — every fact matching the Lab 1 report, together with the `sources` that informed it (`200 OK`):
 
-Response:
+![Grounded Q&A in Bruno](images/grounded-question.png)
 
-```json
-{
-  "answer": "Based on the context provided:\n\n**Model Architecture:** ResNet-18 (implemented from scratch in PyTorch), specifically a CIFAR-style ResNet-18 with ~11.2 M trainable parameters.\n\n**Dataset:** CIFAR-100\n\n**Top-1 Accuracy:** 76.33% (achieved at epoch 58)",
-  "sources": ["README.md", "report.md", "train_resnet_cifar100.ipynb"]
-}
-```
+**Off-topic question.** Asking something outside the corpus ("What is the capital of France?") makes the assistant decline — it states the question is not related to the provided context rather than answering from the model's general knowledge, exactly the behavior the system prompt enforces:
 
-Every fact (ResNet-18 from scratch, CIFAR-100, ~11.2 M params, 76.33% at epoch 58) matches the Lab 1 report — the answer is drawn from the retrieved chunks, not invented.
-
-**Off-topic question** — proving the grounding holds:
-
-```json
-{ "question": "What is the capital of France?", "k": 5 }
-```
-
-Response:
-
-```json
-{
-  "answer": "I don't know — that question is not contained in the provided context. The context is about training a ResNet-18 model on CIFAR-100, not about geography.",
-  "sources": ["report.md", "train_resnet_cifar100.ipynb"]
-}
-```
-
-The assistant declines rather than answering from the model's general knowledge — exactly the behavior the system prompt enforces.
+![Off-topic Q&A in Bruno](images/offtop-question.png)
 
 ### 2.4 API surface
 
