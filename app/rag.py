@@ -12,10 +12,8 @@ import uuid
 import chromadb
 from sentence_transformers import SentenceTransformer
 
-# Loaded once at import time (downloads ~80 MB on the first run).
 _model = SentenceTransformer("all-MiniLM-L6-v2")
 
-# Persistent, embedded vector DB — it lives on disk, no separate server to run.
 _client = chromadb.PersistentClient(path="chroma_db")
 _collection = _client.get_or_create_collection("documents")
 
@@ -31,7 +29,6 @@ def chunk(text: str, size: int = 800, overlap: int = 100) -> list[str]:
         end = start + size
         window = text[start:end]
         if end < len(text):
-            # Prefer a paragraph break, then a sentence end, then a space.
             split = window.rfind("\n\n")
             if split == -1:
                 split = window.rfind(". ")

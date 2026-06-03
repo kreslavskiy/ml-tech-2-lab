@@ -2,11 +2,11 @@
 
 from dotenv import load_dotenv
 
-load_dotenv()  # load ANTHROPIC_API_KEY / LLM_MODEL from a local .env file
+load_dotenv() 
 
-from fastapi import FastAPI  # noqa: E402
+from fastapi import FastAPI 
 
-from app import index_api, qa_api  # noqa: E402
+from app import index_api, qa_api 
 
 app = FastAPI(
     title="Lab 2 — RAG Q&A",

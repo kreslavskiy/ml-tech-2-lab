@@ -13,8 +13,6 @@ import anthropic
 # Default model is claude-sonnet-4-6; override with the LLM_MODEL env var.
 MODEL = os.environ.get("LLM_MODEL", "claude-sonnet-4-6")
 
-# The task definition. Instructing the model to answer ONLY from context is
-# what makes this "retrieval-augmented" rather than free-form generation.
 SYSTEM_PROMPT = (
     "You are a question-answering assistant. Answer the user's question using "
     "ONLY the provided context. If the answer is not contained in the context, "
